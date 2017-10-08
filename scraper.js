@@ -57,20 +57,23 @@ function cleanUp(db) {
 	});
 }
 
-function fetchPage(url, callback) {
-	request(url, function (error, response, body) {
-		if (error) {
-			console.log("Error requesting page: " + error);
-			return;
-		}
-
-		callback(body);
-	});
+function fetchPage(url, delay, callback) {
+	var interval = delay * 1000;
+	setTimeout(function (i) {
+		request(url, function (error, response, body) {
+			if (!error) {
+				callback(body);
+			} else {
+				console.log("Error requesting page: " + error);
+				return;
+			}
+		}, interval * i, i);
+	})
 }
 
 function scrapper(db, site, type) {
 	return new Promise(function (resolve, reject) {
-		fetchPage(site, function (body) {
+		fetchPage(site, 0, function (body) {
 			var $ = cheerio.load(body);
 
 			var elements = $("#proxylisttable > tbody > tr");
@@ -117,7 +120,8 @@ function scrapper(db, site, type) {
 }
 function scrapperFromFreeProxyLists(db, site, type) {
 	return new Promise(function (resolve, reject) {
-		fetchPage(site, function (body) {
+		fetchPage(site, 10, function (body) {
+
 			var $ = cheerio.load(body);
 
 			var elements = $("#tblproxy  > tbody > tr");
