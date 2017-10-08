@@ -134,12 +134,14 @@ function scrapperFromFreeProxyLists(db, site, type) {
 			elements.each(function () {
 				index++;
 				console.log(index)
-				if (index > 2) { //ignore 2 first rows
+				if (index >= 2) { //ignore 1 first rows
 					var item = $(this).find("td");
 					var ipandport =  $(item[1]).text();
+					console.log(ipandport);
 					var fields = ipandport.split(':');
 					var ip = fields[0];
 					var port = parseInt(fields[1], 10);
+					console.log('ip:port = ' + ip + ':' + port);
 					var code = '';
 					var country = '';
 					var anonymity = '';
@@ -166,8 +168,9 @@ function scrapperFromFreeProxyLists(db, site, type) {
 					// }
 
 					var lastchecked = d.toJSON();
-
-					updateRow(db, ip, port, code, country, anonymity, google, https, lastchecked, type);
+					if (ip && port) {					
+						updateRow(db, ip, port, code, country, anonymity, google, https, lastchecked, type);
+					}
 				}
 			});
 			resolve();
