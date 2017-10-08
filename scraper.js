@@ -137,6 +137,7 @@ function scrapperFromFreeProxyLists(db, site, type) {
 				if (index >= 2) { //ignore 1 first rows
 					var item = $(this).find("td");
 					var ipandport =  $(item[0]).text();
+					ipandport = ipandport.replace(/\s/g,'');
 					console.log(ipandport);
 					var fields = ipandport.split(':');
 					var ip = fields[0];
