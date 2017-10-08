@@ -124,22 +124,25 @@ function scrapperFromFreeProxyLists(db, site, type) {
 
 			var $ = cheerio.load(body);
 
-			var elements = $("#tblproxy  > tbody > tr");
+			var tbody = $("#ctl00_ContentPlaceHolder1_GridViewNEW > tbody");
+
+
+			let elements = tbody.find("tr");
 			console.log()
 			console.log("Found " + elements.length + " elements");
-
 			var index = 0;
 			elements.each(function () {
 				index++;
 				console.log(index)
 				if (index > 2) { //ignore 2 first rows
 					var item = $(this).find("td");
-
-					var ip = $(item[1]).text();
-					var port = parseInt($(item[2]).text(), 10);
-					var code = $(item[4]).text();
-					var country = $(item[4]).text();
-					var anonymity = $(item[3]).text();
+					var ipandport =  $(item[1]).text();
+					var fields = ipandport.split(':');
+					var ip = fields[0];
+					var port = parseInt(fields[1], 10);
+					var code = '';
+					var country = '';
+					var anonymity = '';
 					var google = 'no';
 					var https = 'yes'
 
@@ -181,7 +184,7 @@ function run(db) {
 	// scrappers.push(scrapper(db, "https://www.sslproxies.org/", "ssl"));
 	// scrappers.push(scrapper(db, "https://us-proxy.org/", "us"));	
 	//skipped socks4/socks5	
-	scrappers.push(scrapperFromFreeProxyLists(db, "http://www.gatherproxy.com/", "free"));
+	scrappers.push(scrapperFromFreeProxyLists(db, "http://www.httptunnel.ge/ProxyListForFree.aspx", "free"));
 
 	Promise.all(scrappers).then(function () {
 		cleanUp(db).then(function () {
