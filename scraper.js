@@ -119,11 +119,10 @@ function scrapperFromFreeProxyLists(db, site, type) {
 		fetchPage(site, function(body) {
 			var $ = cheerio.load(body);
 
-			var elements = $("table.DataGrid > tbody > tr");
-			console.log()
-			console.log("Found " + elements.length + " elements");
-			elements.each(function() {
-				var item = $(this).find("td");
+			//var elements = $("table.DataGrid > tbody > tr");		
+			$.each("table.DataGrid > tbody > tr", function() {
+				var tr = $(this);
+				var item = tr.find("td");
 
 				var ip = $(item[0]).text();
 				var port = parseInt($(item[1]).text(), 10);
