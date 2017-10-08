@@ -121,9 +121,13 @@ function scrapperFromFreeProxyLists(db, site, type) {
 			var $ = cheerio.load(body);
 
 			var elements = $("#tblproxy  > tbody > tr");
+			console.log()
+			console.log("Found " + elements.length + " elements");
+
 			var index = 0;
 			elements.each(function () {
 				index++;
+				console.log(index)
 				if (index > 2) { //ignore 2 first rows
 					var item = $(this).find("td");
 
